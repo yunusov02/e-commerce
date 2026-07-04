@@ -584,7 +584,7 @@
 - [ ] If the Catalog service is temporarily down, the rest of the site (cart, orders) keeps working with a clear degraded message on catalog-dependent pages.
 
 ### Backend Tasks
-- [ ] Create two new deployable services: `catalog-service` and `payment-service`, each with its own FastAPI app, its own DB (or DB schema), and its own Dockerfile.
+- [ ] Create two new deployable services: `catalog-service` (Django/DRF) and `payment-service` (FastAPI), each with its own project structure, its own DB (or DB schema), and its own Dockerfile. Keep `auth-service` as FastAPI and keep the API Gateway as FastAPI.
 - [ ] Move `Product`, `Category`, `Attribute`, `Variant`, `Warehouse`, `Stock` models/logic into `catalog-service`.
 - [ ] Move `Payment`, `MockPaymentGateway` logic into `payment-service`.
 - [ ] Define `.proto` files for `CatalogService` (`GetProduct`, `CheckStock`) and `PaymentService` (`ChargePayment`) using Protocol Buffers.

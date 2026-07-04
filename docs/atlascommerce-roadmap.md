@@ -39,9 +39,10 @@ By Sprint 15 you will have rewritten major subsystems 3–4 times, which is inte
 **Request flow (synchronous path):**
 ```
 Client (React/TS) → Nginx (reverse proxy/TLS) → API Gateway
-   → [Auth Service] → [Catalog Service] → [Cart/Order Service] → [Payment Service]
-        each service: FastAPI (ASGI/Uvicorn behind Gunicorn workers)
-        each service: Repository → Service Layer → Domain (Hexagonal/Onion)
+   → [Auth Service] (FastAPI) → [Catalog Service] (Django/DRF) → [Cart/Order Service] (Django/DRF) → [Payment Service] (FastAPI)
+        Auth Service: FastAPI (ASGI/Uvicorn behind Gunicorn workers)
+        Payment Service: FastAPI (ASGI/Uvicorn behind Gunicorn workers)
+        Django services: Django/DRF (Gunicorn/uWSGI) with Repository → Service Layer → Domain (Hexagonal/Onion)
    → PostgreSQL (per-service schema/DB) | Redis (cache/session) | MongoDB (catalog docs, reviews)
 ```
 
@@ -56,8 +57,8 @@ Order Service --(OrderCreated)--> Outbox table --(CDC/poller)--> Kafka topic "or
 
 **Why each piece exists:**
 - **Nginx**: TLS termination, reverse proxy, static file serving, first line of rate limiting.
-- **FastAPI**: async-first, OpenAPI-native, type-safe — primary API framework.
-- **Django/DRF**: used for the Admin/Internal Tools mini-project — batteries-included ORM/admin comparison.
+- **FastAPI**: async-first, OpenAPI-native, type-safe — the primary API framework for the Auth Service and the API Gateway.
+- **Django/DRF**: used for the Catalog, Order, Payment, and Admin/Internal Tools services once the monolith is split — especially where a batteries-included ORM/admin layer and rapid CRUD-heavy development are beneficial.
 - **PostgreSQL**: ACID transactional core (orders, payments, inventory) — correctness matters more than raw throughput here.
 - **MongoDB**: flexible schema for product catalog variants/attributes and review documents where rigid relational schema adds friction.
 - **Redis**: cache-aside for hot reads, session store, distributed locks, rate limiting, Celery broker option.
@@ -341,7 +342,7 @@ Each sprint below is intentionally dense — treat every bullet as a checklist i
 
 ### Sprint 11 — Splitting the Monolith: Microservices, API Gateway & gRPC
 
-**Objective:** Extract 2–3 bounded contexts (e.g., Catalog, Order, Payment) into independently deployable services communicating over gRPC internally and REST externally, behind an API Gateway.
+**Objective:** Extract 2–3 bounded contexts (e.g., Catalog, Order, Payment) into independently deployable services communicating over gRPC internally and REST externally, behind an API Gateway. The Auth Service and Payment Service remain FastAPI; the extracted domain services are implemented in Django/DRF where their CRUD-heavy and admin-oriented workflows benefit from Django's batteries-included stack.
 
 **Why this sprint exists:** This is where "modular monolith" pays off — module boundaries designed since Sprint 3 become service boundaries, proving the value of that early discipline.
 
@@ -354,7 +355,7 @@ Each sprint below is intentionally dense — treat every bullet as a checklist i
 - **Observability concepts:** Per-service logs now need correlation — Request-ID propagation across service boundaries via gRPC metadata (full tracing arrives in Sprint 14).
 - **Security concepts:** Internal-only network for gRPC (not exposed publicly); mTLS discussed as the production answer (deferred to Kubernetes/service-mesh sprint).
 - **Testing concepts:** Contract Testing formalized (Pact-style) between the Gateway and each downstream service, since integration tests across real network boundaries are now expensive.
-- **Practical tasks:** Extract Catalog and Payment into standalone services with their own DBs and Dockerfiles; implement an API Gateway (FastAPI-based) that fans out to them via gRPC and assembles responses; add health-check endpoints to every service; write contract tests for each service boundary.
+- **Practical tasks:** Extract Catalog into a standalone Django/DRF service with its own DB and Dockerfile; keep the Auth Service and Payment Service as FastAPI services; implement an API Gateway (FastAPI-based) that fans out to them via gRPC and assembles responses; add health-check endpoints to every service; write contract tests for each service boundary.
 - **Deliverables:** A genuinely multi-service system, each independently deployable and independently testable; documented service boundary diagram with justifications.
 - **Definition of Done:** Each service can be deployed independently without redeploying the others; the Gateway degrades gracefully (partial data + error) if one downstream service is unavailable.
 - **Common mistakes:** Splitting services along technical layers instead of business capabilities (a classic "distributed monolith" anti-pattern); sharing a database across services "just for now."
