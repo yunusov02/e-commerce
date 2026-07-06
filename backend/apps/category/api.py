@@ -10,6 +10,10 @@ from .schemas import (
     CategoryUpdateSchema,
 )
 
+from sqlalchemy import select
+from sqlalchemy.orm import selectinload
+
+from core.logging import get_logger
 
 category_router = APIRouter(
     prefix="/categories",
@@ -18,20 +22,37 @@ category_router = APIRouter(
 )
 
 
+
+logger = get_logger("category")
+
 @category_router.get("/", summary="Get all categories")
 async def get_categories(session: SessionDependency) -> list[CategoryListSchema]:
 
-    stmt = session.query(Category).all()
-    return stmt
+    stmt = select(Category)
 
+    result = await session.execute(stmt)
+
+    categories = result.scalars().all()
+
+    logger.info("Fetched all categories", count=len(categories))
+    return categories
 
 @category_router.get("/{category_id}", summary="Get category by ID")
 async def get_category_by_id(
     category_id: int, session: SessionDependency
 ) -> CategoryDetailSchema:
+    
+    stmt = (
+        select(Category)
+        .options(selectinload(Category.children).selectinload(Category.children))
+        .where(Category.id == category_id)
+    )
 
-    stmt = session.query(Category).filter(Category.id == category_id).first()
-    return stmt
+    result = await session.execute(stmt)
+    category = result.scalar_one_or_none()
+
+    logger.info(f"Fetched category with ID: {category_id}")
+    return category
 
 
 @category_router.post("/", summary="Create a new category")
@@ -40,10 +61,13 @@ async def create_category(
 ) -> CategoryDetailSchema:
 
     new_category = Category(**category.model_dump())
-    session.add(new_category)
-    session.commit()
-    session.refresh(new_category)
 
+    session.add(new_category)
+
+    await session.commit()
+    await session.refresh(new_category)
+
+    logger.info(f"Created new category with ID: {new_category.id}", name=new_category.name, slug=new_category.slug)
     return new_category
 
 
@@ -61,8 +85,10 @@ async def update_category(
     for key, value in category.model_dump().items():
         setattr(stmt, key, value)
 
-    session.commit()
-    session.refresh(stmt)
+    await session.commit()
+    await session.refresh(stmt)
+
+    logger.info(f"Updated category with ID: {category_id}", name=stmt.name, slug=stmt.slug)
     return stmt
 
 
@@ -75,6 +101,8 @@ async def delete_category(category_id: int, session: SessionDependency) -> dict:
         return {"message": "Category not found"}
 
     session.delete(stmt)
-    session.commit()
+    await session.commit()
+
+    logger.info(f"Category deleted: {category_id}")
     return {"message": "Category deleted successfully"}
 

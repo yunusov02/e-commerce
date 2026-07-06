@@ -7,7 +7,7 @@ class CategoryListSchema(BaseModel):
     parent_id: int | None = Field(None, description="Reference to the parent category (can be null for top-level categories)")
 
     class Config:
-        orm_mode = True
+        form_attributes = True
 
 
 class CategoryCreateSchema(BaseModel):
@@ -16,7 +16,7 @@ class CategoryCreateSchema(BaseModel):
     parent_id: int | None = Field(None, description="Reference to the parent category (can be null for top-level categories)")
 
     class Config:
-        orm_mode = True
+        form_attributes = True
 
 
 class CategoryUpdateSchema(BaseModel):
@@ -25,7 +25,7 @@ class CategoryUpdateSchema(BaseModel):
     parent_id: int | None = Field(None, description="Reference to the parent category (can be null for top-level categories)")
 
     class Config:
-        orm_mode = True
+        form_attributes = True
 
 
 
@@ -37,4 +37,4 @@ class CategoryDetailSchema(BaseModel):
     children: list["CategoryDetailSchema"] = Field(default_factory=list, description="List of child categories")
 
     class Config:
-        orm_mode = True
+        form_attributes = True

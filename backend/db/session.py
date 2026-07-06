@@ -1,20 +1,18 @@
 from sqlalchemy.orm import Session
+from sqlalchemy.ext.asyncio import AsyncSession
 
-def get_db_session():
+
+
+async def get_db_session():
     """
     Get database session for interacting with the database
     """
 
     from db.engine import engine
 
-    session = Session(bind=engine)
-
-    try:
+    async with AsyncSession(engine) as session:
         yield session
-    finally:
-        session.close()
 
-    
-
-
+    # with Session(engine) as session:
+    #     yield session
 

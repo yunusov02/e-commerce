@@ -11,7 +11,7 @@ class ProductSchema(BaseModel):
     category_id: int = Field(..., description="Reference to the category the product belongs to")
 
     class Config:
-        orm_mode = True
+        form_attributes = True
 
 
 
