@@ -1,43 +1,45 @@
 Act as a senior software architect, backend engineer, technical mentor, and curriculum designer.
 
-I want to build a production-ready e-commerce platform from scratch, and I want this project to help me become a middle+ Python engineer by the end.
+I want to build a production-ready e-commerce platform from scratch over 100 days, 
+and I want this project to help me become a middle+ Python engineer by the end.
 
-Your task is to create a detailed 15-sprint roadmap for this project.
+Your task is to create a detailed 100-day implementation plan for this project.
 
 ## Main goals
 1. Build a real-world e-commerce system end-to-end.
-2. Use FastAPI as the primary backend framework.
-3. Make me comfortable with Django, Django REST Framework, and Flask as well.
-4. Ensure that by the end of the project I have strong middle+ level knowledge in backend engineering, databases, distributed systems, architecture, testing, observability, DevOps, and production readiness.
-5. Make the roadmap practical, cumulative, and portfolio-worthy.
+2. Use FastAPI as the primary backend framework for the monolith phase and for auth/gateway/payment services.
+3. Use Django + Django REST Framework for the catalog microservice when the system splits into microservices.
+4. Auth service must NOT be Django — it stays FastAPI throughout the entire project.
+5. Make me comfortable with Django, Django REST Framework, and Flask through comparisons or side implementations.
+6. Ensure that by the end I have strong middle+ level knowledge in backend engineering, databases, distributed systems, architecture, testing, observability, DevOps, and production readiness.
+7. Make the plan practical, cumulative, and portfolio-worthy.
 
 ## Required tech stack
 
 ### Backend
-- FastAPI as the main backend
-- Django / Django REST Framework
-- Flask
+- FastAPI (main monolith → API Gateway, Auth service, Payment service, Notification service)
+- Django + Django REST Framework (catalog microservice + Delivery & Warehouse service, after microservices split on Day 50+)
+- Flask (Product Activity Monitor — lightweight internal audit/admin service introduced in Phase 9)
 
 ### Databases
-- PostgreSQL
-- MongoDB
+- PostgreSQL (primary transactional DB)
+- MongoDB (reviews, activity logs)
+- SQLite (dev only, replaced by Day 10)
 
 ### Caching / async / messaging
 - Redis
 - Celery
 - RabbitMQ
-- Kafka
+- Kafka (introduced after Day 50)
 
 ### Infrastructure / deployment
 - Docker
 - Docker Compose
 - Kubernetes
 - Nginx
-- ASGI
-- WSGI
-- S3
-- MinIO
-- CI/CD
+- ASGI / WSGI
+- S3 / MinIO
+- CI/CD (GitHub Actions)
 
 ### Observability / monitoring
 - Prometheus
@@ -52,7 +54,6 @@ Your task is to create a detailed 15-sprint roadmap for this project.
 
 ### Search
 - Elasticsearch
-- OpenSearch
 
 ### Testing
 - pytest
@@ -61,152 +62,349 @@ Your task is to create a detailed 15-sprint roadmap for this project.
 - Contract tests
 - End-to-end tests
 
-## What I want from the roadmap
+## What I want from the plan
 
-Create exactly 15 sprints.
+Create exactly 100 days of tasks, grouped into phases of roughly 7–10 days each.
 
-For each sprint, include all of the following:
+Each phase must be broken down day by day (e.g., Day 1, Day 2, ... Day 7) with specific tasks assigned to each individual day and a realistic time estimate for every task on that day.
 
-1. Sprint title
-2. Sprint objective
-3. What I should learn in this sprint
-4. Why those topics matter in a real e-commerce system
-5. What exactly I should build in this sprint
-6. Backend tasks
-7. Frontend tasks
-8. Database design and data modeling tasks
-9. Async / background job / messaging tasks
-10. DevOps / infrastructure tasks
-11. Observability / monitoring tasks
-12. Testing tasks
-13. Deliverables at the end of the sprint
-14. Definition of Done
-15. Common mistakes / pitfalls to avoid
-16. Interview-style topics or questions I should be able to answer after finishing the sprint
+### Time estimate rules
 
-## Project expectations
+- Every individual task inside a day must include a time estimate in parentheses at the end, e.g.:
+  `- [ ] Define SQLAlchemy Product model with id, name, price, sku, category_id columns (45 min)`
+- Time estimates must be realistic for a developer who is learning, not an expert who already knows the solution. Account for reading docs, hitting errors, and iterating.
+- Use these units: `min` for tasks under 60 minutes, `h` for tasks 1 hour or more (e.g., `1.5h`, `2h`).
+- At the top of each day's task list, include a **Daily Time Budget** line showing the total estimated hours for that day, e.g.:
+  `**Daily Time Budget: ~5.5h**`
+- Total time per day must be between 4h and 6h — realistic for someone working on this as a serious side project or bootcamp-style learning. Do not create days with 10h of tasks.
+- At the end of each phase, include a **Phase Time Summary** table like this:
+  ```
+  | Day | Focus                          | Est. Time |
+  |-----|--------------------------------|-----------|
+  | 1   | Project setup + first model    | 5h        |
+  | 2   | CRUD endpoints + validation    | 5.5h      |
+  | ... | ...                            | ...       |
+  | 7   | Docker + integration tests     | 4.5h      |
+  | **Total** |                         | **35h**   |
+  ```
+- If a task is inherently hard to estimate (e.g., debugging), write a range: `(30–90 min)`.
+- Group tasks within a day into morning and afternoon blocks if it helps clarity, but this is optional.
 
-The final project should feel like a serious production-grade e-commerce platform.
+For each day group / phase, include all of the following sections:
 
-It should include most or all of the following:
-- authentication and authorization
-- user profiles
-- product catalog
-- categories and attributes
-- inventory management
-- cart
-- checkout
-- order management
-- payment flow (mock or sandbox is fine)
-- discount / coupon system
-- reviews and ratings
-- notifications
-- admin / internal tools
-- search
-- caching
-- background jobs
-- event-driven communication where appropriate
-- monitoring and observability
-- CI/CD
-- containerized deployment
-- production-like architecture
+1. Phase title and day range (e.g., "Phase 1: Days 1–7 — Foundations")
+2. Phase objective
+3. Project Architecture Snapshot (see format rules below — required in every phase)
+4. Business Features (what a user/admin can do after this phase)
+5. Day-by-day tasks with per-task time estimates (see time estimate rules above)
+6. Frontend Tasks (atomic, checkbox format, with time estimates)
+7. Database Changes (migrations, schema decisions, indexes, with time estimates)
+8. DevOps & Infrastructure Tasks (Docker, CI, Kubernetes steps, with time estimates)
+9. Testing Tasks (unit, integration, contract tests — at least 5 per phase, with time estimates)
+10. Architecture Improvements (patterns introduced, ADRs, refactors)
+11. Phase Time Summary table
+12. Expected Deliverables (what is runnable/demonstrable at end of phase)
+13. Definition of Done (pass criteria before moving to next phase)
+14. Common mistakes / pitfalls to avoid
+15. Interview-style topics to be able to answer after this phase
 
-## Important constraints
+### Project Architecture Snapshot rules
 
-- FastAPI must be the main backend framework.
-- I should also become comfortable with Django/DRF and Flask through comparisons, mini modules, or side implementations where appropriate.
-- PostgreSQL should be the main transactional database.
-- MongoDB should be used where it makes sense, and you should explain why.
-- Redis, Celery, RabbitMQ, and Kafka should be introduced in a realistic order and with clear use cases.
-- Docker should be introduced early.
-- Kubernetes should be introduced later, after the application becomes more production-like.
-- Observability should not be an afterthought; it should evolve gradually through the sprints.
-- Testing should be part of every sprint, not only at the end.
-- The plan should move from fundamentals to advanced backend/system design topics in a logical progression.
+Every phase MUST include a `### Project Architecture` section placed immediately after the phase objective. It must contain:
 
-## Knowledge depth requirement
+**a) ASCII architecture diagram** showing the FULL system state at the END of this phase.
+- Show every running component (services, databases, caches, queues, brokers, storage, frontend, gateway).
+- Show connections between components using arrows (`→`, `←`, `↔`, `-->`).
+- Label each arrow with the protocol used (HTTP, gRPC, AMQP, TCP, SQL, etc.).
+- Use boxes or brackets to group components by concern (e.g., [Browser], [Backend], [Infrastructure]).
+- Example minimal format:
+  ```
+  [Browser]
+      |  HTTP
+      ↓
+  [React + TypeScript]
+      |  REST/JSON
+      ↓
+  [FastAPI Monolith :8000]
+      |  SQL (asyncpg)
+      ↓
+  [PostgreSQL :5432]
+  ```
 
-I need to deeply understand the following topic groups and their practical use in this project:
+**b) What changed from the previous phase** — a short bullet list (3–6 bullets) naming exactly which components were added, removed, or replaced compared to the previous phase's diagram.
 
-1. Database and SQL topics
-2. Distributed systems and backend topics
-3. API and web topics
-4. Caching topics
-5. Message broker / queue topics
-6. Architecture and design topics
-7. Python-specific topics
-8. FastAPI topics
-9. Django / ORM / web framework topics
-10. Testing topics
-11. Observability and production topics
-12. DevOps / deployment topics
-13. Security topics
-14. Performance and reliability topics
-15. Code review and team communication topics
+**c) Architecture style at this phase** — one line naming the current style:
+  - "Single-process monolith"
+  - "Modular monolith"
+  - "Modular monolith with async workers"
+  - "Partial microservices (catalog extracted)"
+  - "Full microservices with event-driven core"
+  - etc.
 
-For FastAPI specifically, I want deep practical understanding of:
-- routing
-- request/response lifecycle
-- dependency injection
-- Pydantic schemas and validation
-- middleware
-- exception handling
-- authentication and authorization
-- async/await usage in FastAPI
-- background tasks
-- file uploads
-- WebSockets
-- API versioning
-- pagination, filtering, and sorting
-- OpenAPI / Swagger generation
-- testing FastAPI applications
-- performance considerations
-- project structure for scalable applications
-- production deployment with ASGI servers
-- integration with PostgreSQL, Redis, Celery, RabbitMQ, Kafka, S3/MinIO, and observability tooling
+**d) Data flow for the most complex operation this phase** — a numbered step-by-step trace (e.g., "Checkout request flow: 1. Browser → Gateway → 2. Gateway → Order service → 3. Order service locks stock row → ...") showing how data moves through the architecture for the most important new feature added this phase.
 
-I will paste the full list of terms below. You must make sure the 15-sprint roadmap covers them in a structured and practical way, not just as theory.
+The architecture diagram must grow and evolve with each phase. It should be obvious that Phase 8's diagram is significantly more complex than Phase 1's, reflecting the real system growth.
+
+## Project phases overview
+
+Structure the 100 days into the following rough phases:
+
+### Phase 1: Days 1–7 — Foundations & Naive CRUD
+- FastAPI project setup, SQLAlchemy + asyncpg, Alembic migrations
+- Product and Category CRUD endpoints
+- React + TypeScript scaffolding
+- Docker + docker-compose (FastAPI + PostgreSQL)
+- 8+ integration tests
+
+### Phase 2: Days 8–15 — Layered Architecture & Authentication
+- Layered architecture: router → service → repository → model
+- JWT auth (FastAPI): register, login, refresh, logout
+- Role-based access control (customer, seller, admin)
+- CORS, request ID middleware
+- Auth must be FastAPI — never Django
+
+### Phase 3: Days 16–23 — Sellers, Attributes, Variants & Inventory
+- Seller profiles, product variants, attribute system
+- Multi-warehouse stock tracking
+- Modular monolith structure (bounded context folders)
+- N+1 query problem: intentionally reproduce and document
+
+### Phase 4: Days 24–30 — Query Performance & Pagination
+- Eager loading (selectinload / joinedload)
+- Cursor-based pagination
+- Composite indexes, EXPLAIN ANALYZE before/after
+- Load testing with Locust
+
+### Phase 5: Days 31–38 — Cart, Checkout & Transactional Integrity
+- Cart CRUD
+- Checkout with SELECT FOR UPDATE (pessimistic locking)
+- Unit of Work pattern
+- Concurrency race-condition tests (20 concurrent checkout requests)
+
+### Phase 6: Days 39–46 — Orders, Payments & Outbox Pattern
+- Order state machine
+- Idempotent payment flow with idempotency keys
+- Outbox pattern (same DB transaction as business write)
+- Audit log for order status changes
+
+### Phase 7: Days 47–54 — Caching, Redis & Background Jobs
+- Redis cache-aside for product/category endpoints
+- ETag + Cache-Control + 304 Not Modified
+- Rate limiting on auth endpoints
+- Celery + RabbitMQ: order confirmation email, invoice PDF generation
+- Extract notification logic out of Celery tasks into a dedicated Notification Service (FastAPI): handles email, push, and future SMS channels via a single internal API; Celery tasks call it instead of sending directly
+- Notification Service owns its own channel registry: each notification type (OrderConfirmation, InvoiceReady, PasswordReset) maps to a template + delivery channel
+
+### Phase 8: Days 55–63 — Microservices Split (Django Catalog + Django Delivery & Warehouse)
+- Extract catalog (products, categories, attributes, variants, stock) into a new catalog-service using Django + DRF
+- Extract warehouse logistics and delivery tracking into a new delivery-warehouse-service using Django + DRF:
+  - Warehouses: physical locations, capacity, operating hours
+  - Shipments: created when an order is paid, tracks carrier, tracking number, status (pending → dispatched → in_transit → delivered)
+  - Delivery slots: available delivery time windows per warehouse/region
+  - Django Admin panel (built-in) used by warehouse staff to update shipment status — document why Django Admin is a natural fit here vs building a custom UI
+- Auth service stays FastAPI — do not move to Django
+- Payment service stays FastAPI
+- Notification service stays FastAPI
+- API Gateway stays FastAPI
+- Define .proto files for gRPC between services (including GetShipmentStatus, UpdateShipmentStatus for delivery-warehouse-service)
+- Separate databases per service (no shared DB): catalog DB, delivery-warehouse DB, order DB, auth DB, payment DB
+- Contract tests between every service boundary
+
+### Phase 9: Days 64–71 — Event-Driven Architecture, Kafka & Product Activity Monitor
+- Kafka producer/consumer setup
+- Replace stub outbox relay with real Kafka publish
+- Saga orchestrator: OrderCreated → InventoryReserved → PaymentSucceeded/Failed → ShipmentCreated → Compensation
+- delivery-warehouse-service consumes PaymentSucceeded → auto-creates a Shipment record → publishes ShipmentCreated event
+- Notification service consumes Kafka events (OrderConfirmed, ShipmentDispatched, ShipmentDelivered) and sends the appropriate notification to the customer — no direct service-to-service call, fully event-driven
+- CQRS read model: order_summaries table
+- SSE (Server-Sent Events) for live order + shipment status updates on the frontend
+- Introduce the Product Activity Monitor as a lightweight Flask service:
+  - Consumes Kafka events: ProductCreated, ProductUpdated, ProductDeleted (published by catalog-service)
+  - Stores an audit trail: who (seller/admin user_id), what action, which product, timestamp, before/after field values
+  - Exposes a read-only Flask REST API for internal admin use: GET /activity?product_id=X, GET /activity?user_id=Y, GET /activity?date_from=...
+  - Uses MongoDB as its store (append-only activity log — document why MongoDB fits here vs PostgreSQL)
+  - Explain Flask choice: lightweight, no ORM ceremony needed, read-only internal tool — compare with why you'd choose FastAPI or Django instead for other services
+
+### Phase 10: Days 72–79 — Search, Reviews & Polyglot Persistence
+- Elasticsearch: product indexing, full-text search, faceted filters
+- MongoDB: reviews and replies
+- MinIO/S3: product image uploads
+- Collaborative filtering recommendations (Celery nightly job)
+
+### Phase 11: Days 80–86 — CI/CD, Multi-Stage Docker & IaC
+- GitHub Actions: lint, type-check, test, coverage gate, Docker build, image scan
+- Multi-stage Dockerfiles (measure image size before/after)
+- Semantic versioning via conventional commits
+- Terraform (or LocalStack) for managed Postgres + registry
+
+### Phase 12: Days 87–93 — Kubernetes, Helm & Autoscaling
+- Local cluster (kind or minikube)
+- Helm charts for all services (api-gateway, auth-service/FastAPI, catalog-service/Django, delivery-warehouse-service/Django, payment-service/FastAPI, notification-service/FastAPI, product-activity-monitor/Flask, celery-worker)
+- HPA, liveness/readiness probes, resource limits
+- Zero-downtime rolling updates
+- CronJob for nightly recommendation job
+
+### Phase 13: Days 94–100 — Observability, Resilience & Portfolio Readiness
+- Prometheus + Grafana (RED metrics, saga state, cache hit ratio)
+- OpenTelemetry tracing across all services
+- Loki log aggregation, Sentry for errors
+- Circuit breaker, bulkhead, retry with jitter
+- Chaos test: kill a pod mid-load-test
+- OWASP Top 10 security review
+- Final README, architecture diagram, 10 ADRs, postmortem doc
+
+## Critical constraints
+
+- FastAPI must be used for: API Gateway, Auth service, Payment service, Order service, Notification service, and the original monolith.
+- Django + DRF must be used for: catalog microservice AND delivery-warehouse service (Phase 8+). Django Admin panel must be shown as a real use case in the delivery-warehouse service for internal staff.
+- Flask must be used for: Product Activity Monitor (Phase 9+). It must be a real running service, not just a comparison exercise.
+- Auth service must NEVER be Django. Auth is always FastAPI.
+- Notification service must NEVER be Django. It stays FastAPI throughout.
+- PostgreSQL must be the main transactional database for all transactional services.
+- MongoDB is used for: reviews (Phase 10) and product activity audit log (Phase 9) — explain the document-store rationale each time it's introduced.
+- Docker must be introduced in Phase 1.
+- Kubernetes introduced in Phase 12.
+- Testing must be in every phase — minimum 5 test tasks per phase.
+- Observability must evolve gradually (structlog in Phase 1 → Prometheus/OTel in Phase 13).
+- Every new service must include: its own Dockerfile, its own database/store, health + readiness endpoints, and contract tests with any service it communicates with.
+- Framework choice justification: every time a new service is introduced, include a 3-bullet explanation of WHY that framework was chosen for that specific service (e.g., "Django for delivery-warehouse because: 1. built-in Admin panel for warehouse staff, 2. mature ORM for complex relational logistics data, 3. WSGI is fine since this service has no WebSocket or streaming needs").
+
+## Final service map (what exists at Day 100)
+
+Include this table in the final output after all phases, showing the complete service topology:
+
+| Service | Framework | Language | DB | Communication | Introduced |
+|---|---|---|---|---|---|
+| API Gateway | FastAPI | Python | — | REST in, gRPC out | Phase 1 |
+| Auth Service | FastAPI | Python | PostgreSQL | gRPC | Phase 2 |
+| Order Service | FastAPI | Python | PostgreSQL | REST + Kafka | Phase 5 |
+| Payment Service | FastAPI | Python | PostgreSQL | gRPC + Kafka | Phase 6 |
+| Notification Service | FastAPI | Python | PostgreSQL | Kafka consumer | Phase 7 |
+| Catalog Service | Django/DRF | Python | PostgreSQL | gRPC + Kafka | Phase 8 |
+| Delivery & Warehouse | Django/DRF | Python | PostgreSQL | gRPC + Kafka | Phase 8 |
+| Product Activity Monitor | Flask | Python | MongoDB | Kafka consumer | Phase 9 |
+| Celery Worker | Celery | Python | — | RabbitMQ | Phase 7 |
+| Frontend | React/TS | JS | — | REST → Gateway | Phase 1 |
 
 ## Output format
 
-Please structure the answer like this:
+Structure the output exactly like the AtlasCommerce Sprint Implementation Plans format, with the architecture section added:
 
-### 1. Overall learning strategy
-- Explain how the 15 sprints are sequenced
-- Explain how the project evolves from beginner-level implementation to middle+ backend engineering level
+```
+## Phase N: Days X–Y — Title
 
-### 2. High-level system architecture
-- Describe the final target architecture
-- Explain which parts are monolith, modular monolith, or microservice-like
-- Explain where PostgreSQL, MongoDB, Redis, RabbitMQ, Kafka, Elasticsearch/OpenSearch, S3/MinIO, and observability tools fit in
+**Phase objective:** One sentence.
 
-### 3. 15-sprint roadmap
-For each sprint, provide:
-- Sprint title
-- Goal
-- Topics to learn
-- What to build
-- Technical tasks
-- Testing tasks
-- DevOps / observability tasks
-- Deliverables
-- Definition of Done
-- Pitfalls
-- Interview readiness
+### Project Architecture
 
-### 4. Coverage map
-Create a coverage map showing which major topic groups are learned in which sprint.
+**Architecture style:** <style name>
 
-### 5. Final outcome
-At the end, summarize:
-- what skills I will have
-- what kind of backend engineer level I will reach
-- what I should be able to explain confidently in interviews
-- what parts of the project will be strongest on my portfolio
+**What changed from Phase N-1:**
+- Added: ...
+- Replaced: ...
+- Removed: ...
 
-Important:
+**System diagram (end of this phase):**
+```
+[component] --protocol--> [component]
+             ...
+```
+
+**Data flow — <most complex new operation>:**
+1. Browser sends POST /checkout → React client
+2. React → FastAPI Gateway (HTTP/REST)
+3. Gateway validates JWT → Auth service (gRPC)
+4. Gateway → Order service: create order (HTTP)
+5. Order service → PostgreSQL: SELECT ... FOR UPDATE (SQL)
+6. Order service → Outbox table (same SQL transaction)
+7. Outbox relay → Kafka topic `orders` (TCP/Kafka)
+...
+
+---
+
+### Business Features
+- [ ] Feature 1
+- [ ] Feature 2
+
+---
+
+#### Day 1 — <focus>
+**Daily Time Budget: ~5h**
+
+- [ ] Task one (30 min)
+- [ ] Task two (1h)
+  - [ ] Sub-task (20 min)
+- [ ] Task three (45 min)
+- [ ] Task four (1.5h)
+- [ ] Task five (45 min)
+
+#### Day 2 — <focus>
+**Daily Time Budget: ~5.5h**
+
+- [ ] Task one (1h)
+- [ ] Task two (30–60 min)
+- [ ] Task three (2h)
+- [ ] Task four (1h)
+
+... (continue for every day in the phase)
+
+---
+
+### Frontend Tasks
+- [ ] Task (time)
+
+### Database Changes
+- [ ] Task (time)
+
+### DevOps & Infrastructure Tasks
+- [ ] Task (time)
+
+### Testing Tasks
+- [ ] Task (time)
+
+### Architecture Improvements
+- [ ] ...
+
+### Phase Time Summary
+
+| Day | Focus                       | Est. Time |
+|-----|-----------------------------|-----------|
+| 1   | Project setup + first model | 5h        |
+| 2   | CRUD endpoints              | 5.5h      |
+| ... | ...                         | ...       |
+| **Total** |                     | **~35h**  |
+
+### Expected Deliverables
+- [ ] ...
+
+### Definition of Done
+- [ ] ...
+
+### Pitfalls to Avoid
+- ...
+
+### Interview Readiness
+- ...
+```
+
+## Important requirements
+
 - Be concrete, not generic.
+- Every task must be a specific, atomic action (not "implement caching" but "add Redis `get_or_set` wrapper in `CacheService` with a configurable TTL default").
 - Do not skip practical implementation details.
-- Do not give a shallow roadmap.
+- Do not give a shallow plan.
 - Make the plan realistic but ambitious.
 - Assume I want to become genuinely employable as a middle+ Python backend engineer after completing this project.
+- When introducing Django in Phase 8, explicitly note the differences from FastAPI (WSGI vs ASGI, ORM patterns, DRF serializers vs Pydantic, admin panel vs custom UI) and why Django was chosen for the catalog service specifically.
+- When Django is introduced, include a side-by-side comparison task: "Implement the same Category list endpoint in DRF that already exists in FastAPI — compare serializer, view, router, and test approaches."
+
+## Architecture diagram requirements (critical)
+
+- Phase 1 diagram must be minimal: React → FastAPI → PostgreSQL.
+- Each subsequent phase must visibly add new components so the diagram clearly grows.
+- By Phase 7 the diagram must include: Redis, Celery worker, RabbitMQ, and the full monolith.
+- By Phase 8 the diagram must show the split into separate services with their own DBs, with the Django catalog-service clearly labeled as "Django/DRF (WSGI)" and auth-service clearly labeled as "FastAPI (ASGI)" — make the contrast obvious.
+- By Phase 9 the diagram must include Kafka topics and the saga orchestrator.
+- By Phase 12 the diagram must show the Kubernetes layer (pods, ingress, HPA, namespaces) wrapping all services.
+- By Phase 13 the diagram must include the full observability stack (Prometheus, Grafana, Loki, Jaeger, Sentry) alongside the application components.
+- Every diagram must be self-contained — a reader should be able to understand the full system from the diagram alone without reading any other section.
