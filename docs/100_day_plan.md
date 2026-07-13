@@ -100,7 +100,7 @@ Before starting Day 1, make sure the following are available on your machine:
 #### Day 1 — Project scaffolding & repo setup
 **Daily Time Budget: ~5h**
 
-- [ ] Create GitHub repo, clone locally, set up `.gitignore` for Python/Node (20 min)
+- [X] Create GitHub repo, clone locally, set up `.gitignore` for Python/Node (20 min)
 - [ ] Initialize Python 3.12 virtual environment, install `fastapi uvicorn sqlalchemy asyncpg alembic pydantic-settings python-dotenv structlog` (30 min)
 - [ ] Create `pyproject.toml` with project metadata and tool config (black, ruff, mypy) (30 min)
 - [ ] Scaffold folder structure: `app/`, `app/api/`, `app/models/`, `app/schemas/`, `app/core/`, `alembic/` (20 min)
