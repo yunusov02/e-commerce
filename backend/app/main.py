@@ -1,7 +1,13 @@
 from fastapi import FastAPI
 from app.core.config import settings
 
+from app.core.routers import init_routers
+
+
 app = FastAPI()
+
+init_routers(app)
+
 
 
 @app.get("/")

@@ -101,13 +101,13 @@ Before starting Day 1, make sure the following are available on your machine:
 **Daily Time Budget: ~5h**
 
 - [X] Create GitHub repo, clone locally, set up `.gitignore` for Python/Node (20 min)
-- [ ] Initialize Python 3.12 virtual environment, install `fastapi uvicorn sqlalchemy asyncpg alembic pydantic-settings python-dotenv structlog` (30 min)
-- [ ] Create `pyproject.toml` with project metadata and tool config (black, ruff, mypy) (30 min)
-- [ ] Scaffold folder structure: `app/`, `app/api/`, `app/models/`, `app/schemas/`, `app/core/`, `alembic/` (20 min)
-- [ ] Write `app/core/config.py` using `pydantic-settings` — load `DATABASE_URL`, `DEBUG`, `SECRET_KEY` from `.env` (45 min)
-- [ ] Write `app/core/database.py` — async SQLAlchemy engine + `AsyncSession` factory + `get_db` dependency (1h)
+- [X] Initialize Python 3.12 virtual environment, install `fastapi uvicorn sqlalchemy asyncpg alembic pydantic-settings python-dotenv structlog` (30 min)
+- [X] Create `pyproject.toml` with project metadata and tool config (black, ruff, mypy) (30 min)
+- [X] Scaffold folder structure: `app/`, `app/api/`, `app/models/`, `app/schemas/`, `app/core/`, `alembic/` (20 min)
+- [X] Write `app/core/config.py` using `pydantic-settings` — load `DATABASE_URL`, `DEBUG`, `SECRET_KEY` from `.env` (45 min)
+- [X] Write `app/core/database.py` — async SQLAlchemy engine + `AsyncSession` factory + `get_db` dependency (1h)
 - [ ] Write `app/main.py` — create FastAPI app, include routers, add structlog middleware that logs `method`, `path`, `status_code`, `duration_ms` (45 min)
-- [ ] Confirm `uvicorn app.main:app --reload` starts and `/docs` is accessible (15 min)
+- [X] Confirm `uvicorn app.main:app --reload` starts and `/docs` is accessible (15 min)
 
 ---
 
