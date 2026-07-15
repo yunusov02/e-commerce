@@ -114,12 +114,12 @@ Before starting Day 1, make sure the following are available on your machine:
 #### Day 2 — SQLAlchemy models & Alembic migrations
 **Daily Time Budget: ~5h**
 
-- [ ] Write `app/models/base.py` — `Base = declarative_base()`, `TimestampMixin` with `created_at`, `updated_at` columns using `server_default=func.now()` (30 min)
-- [ ] Write `app/models/category.py` — `Category` model: `id`, `name`, `slug`, `description`, `parent_id` (self-referential FK) (45 min)
-- [ ] Write `app/models/product.py` — `Product` model: `id`, `name`, `description`, `price` (Numeric 10,2), `sku` (unique), `category_id` (FK), `is_active`, timestamps (45 min)
-- [ ] Configure `alembic.ini` and `alembic/env.py` to use async engine and import `Base.metadata` (1h)
-- [ ] Run `alembic revision --autogenerate -m "create products and categories"` — inspect generated migration file (30 min)
-- [ ] Run `alembic upgrade head` against local PostgreSQL — verify tables exist with `\d products` in psql (20 min)
+- [x] Write `app/models/base.py` — `Base = declarative_base()`, `TimestampMixin` with `created_at`, `updated_at` columns using `server_default=func.now()` (30 min)
+- [x] Write `app/models/category.py` — `Category` model: `id`, `name`, `slug`, `description`, `parent_id` (self-referential FK) (45 min)
+- [x] Write `app/models/product.py` — `Product` model: `id`, `name`, `description`, `price` (Numeric 10,2), `sku` (unique), `category_id` (FK), `is_active`, timestamps (45 min)
+- [x] Configure `alembic.ini` and `alembic/env.py` to use async engine and import `Base.metadata` (1h)
+- [x] Run `alembic revision --autogenerate -m "create products and categories"` — inspect generated migration file (30 min)
+- [x] Run `alembic upgrade head` against local PostgreSQL — verify tables exist with `\d products` in psql (20 min)
 - [ ] Write `app/schemas/product.py` — `ProductCreate`, `ProductUpdate`, `ProductRead` Pydantic models (45 min)
 - [ ] Write `app/schemas/category.py` — `CategoryCreate`, `CategoryUpdate`, `CategoryRead` Pydantic models (25 min)
 
