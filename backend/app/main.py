@@ -2,12 +2,17 @@ from fastapi import FastAPI
 from app.core.config import settings
 
 from app.core.routers import init_routers
+from app.core.logging import setup_logging
+from app.core.middleware import LoggingMiddleware
 
+
+# Set Up logging
+setup_logging()
 
 app = FastAPI()
 
 init_routers(app)
-
+app.add_middleware(LoggingMiddleware)
 
 
 @app.get("/")
