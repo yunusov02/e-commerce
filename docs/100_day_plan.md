@@ -120,8 +120,8 @@ Before starting Day 1, make sure the following are available on your machine:
 - [x] Configure `alembic.ini` and `alembic/env.py` to use async engine and import `Base.metadata` (1h)
 - [x] Run `alembic revision --autogenerate -m "create products and categories"` — inspect generated migration file (30 min)
 - [x] Run `alembic upgrade head` against local PostgreSQL — verify tables exist with `\d products` in psql (20 min)
-- [ ] Write `app/schemas/product.py` — `ProductCreate`, `ProductUpdate`, `ProductRead` Pydantic models (45 min)
-- [ ] Write `app/schemas/category.py` — `CategoryCreate`, `CategoryUpdate`, `CategoryRead` Pydantic models (25 min)
+- [x] Write `app/schemas/product.py` — `ProductCreate`, `ProductUpdate`, `ProductRead` Pydantic models (45 min)
+- [x] Write `app/schemas/category.py` — `CategoryCreate`, `CategoryUpdate`, `CategoryRead` Pydantic models (25 min)
 
 ---
 
