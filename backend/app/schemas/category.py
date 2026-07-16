@@ -21,14 +21,8 @@ class CategoryCreate(CategoryBase):
     
 class CategoryUpdate(CategoryBase):
     pass
-    
-    
-class CategoryParent(CategoryBase):
-    id: int
-    name: str
-    
+
+
 class CategoryRead(CategoryBase):
     id: int
-    parent: CategoryParent | None = None
-    
-        
+

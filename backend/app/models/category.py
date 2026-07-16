@@ -12,10 +12,11 @@ class Category(Base):
     
     id: Mapped[int] = mapped_column(Integer, primary_key=True, index=True)
     name: Mapped[str] = mapped_column(String, nullable=False)
-    slug: Mapped[str] = mapped_column(String, nullable=False)
+    slug: Mapped[str] = mapped_column(String, nullable=False, unique=True)
     description: Mapped[str] = mapped_column(String, nullable=False)
-    parent_id: Mapped[int | None] = mapped_column(Integer, ForeignKey("category.id"), nullable=True)
+    parent_id: Mapped[int | None] = mapped_column(Integer, ForeignKey("category.id", ondelete="SET NULL"), nullable=True)
     
     parent = relationship("Category", remote_side=[id])
-    children = relationship("Category", back_populates="parent")
+    children = relationship("Category", back_populates="parent", passive_deletes=True)
+    products = relationship("Product", back_populates="category", passive_deletes=True)
     

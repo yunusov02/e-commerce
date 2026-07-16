@@ -128,13 +128,13 @@ Before starting Day 1, make sure the following are available on your machine:
 #### Day 3 — CRUD endpoints for Category and Product
 **Daily Time Budget: ~5.5h**
 
-- [ ] Write `app/api/categories.py` — `GET /categories`, `POST /categories`, `GET /categories/{id}`, `PUT /categories/{id}`, `DELETE /categories/{id}` using raw async session (1.5h)
-- [ ] Write `app/api/products.py` — same five endpoints for products (1.5h)
-- [ ] Register both routers in `app/main.py` under `/api/v1` prefix (15 min)
-- [ ] Add `HTTPException` 404 handling when row not found; add 422 validation error handler that returns structured JSON (45 min)
-- [ ] Test all endpoints manually via Swagger UI `/docs` — create 2 categories, create 3 products, update one, delete one (30 min)
-- [ ] Add `response_model` to all endpoints and verify extra fields are stripped (30 min)
-- [ ] Write `app/core/exceptions.py` — `NotFoundError`, `ConflictError` custom exceptions + handlers registered on the app (30 min)
+- [x] Write `app/api/categories.py` — `GET /categories`, `POST /categories`, `GET /categories/{id}`, `PUT /categories/{id}`, `DELETE /categories/{id}` using raw async session (1.5h)
+- [x] Write `app/api/products.py` — same five endpoints for products (1.5h)
+- [x] Register both routers in `app/main.py` under `/api/v1` prefix (15 min)
+- [x] Add `HTTPException` 404 handling when row not found; add 422 validation error handler that returns structured JSON (45 min)
+- [x] Test all endpoints manually via Swagger UI `/docs` — create 2 categories, create 3 products, update one, delete one (30 min)
+- [x] Add `response_model` to all endpoints and verify extra fields are stripped (30 min)
+- [x] Write `app/core/exceptions.py` — `NotFoundError`, `ConflictError` custom exceptions + handlers registered on the app (30 min)
 
 ---
 

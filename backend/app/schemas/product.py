@@ -2,8 +2,6 @@ from decimal import Decimal
 
 from pydantic import BaseModel, ConfigDict, Field
 
-from .category import CategoryRead
-
 
 class ProductBase(BaseModel):
 
@@ -12,18 +10,18 @@ class ProductBase(BaseModel):
     name: str
     description: str
     price: Decimal = Field(max_digits=10, decimal_places=2, gt=0)
-    category_id: int
+
 
 class ProductCreate(ProductBase):
     sku: str
-    
-    
+    category_id: int
+
+
 class ProductUpdate(ProductBase):
-    pass    
-    
-    
+    category_id: int
+
+
 class ProductRead(ProductBase):
     id: int
-    category: CategoryRead
-    
-    
+    category_id: int
+

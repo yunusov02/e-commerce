@@ -14,7 +14,7 @@ class Product(Base):
     description: Mapped[str] = mapped_column(String, nullable=False)
     price: Mapped[float] = mapped_column(Numeric(10, 2), nullable=False)
     sku: Mapped[str] = mapped_column(String, nullable=False, unique=True)
-    category_id: Mapped[int] = mapped_column(Integer, ForeignKey("category.id"))
+    category_id: Mapped[int] = mapped_column(Integer, ForeignKey("category.id"), nullable=False)
     category = relationship("Category", back_populates="products")
     
     
