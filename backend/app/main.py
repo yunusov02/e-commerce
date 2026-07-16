@@ -25,7 +25,6 @@ app.add_middleware(LoggingMiddleware)
 async def root():
     
     data = {
-        "database_url": settings.DATABASE_URL,
         "secret_key": settings.SECRET_KEY,
         "edit_mode": settings.DEBUG
     }

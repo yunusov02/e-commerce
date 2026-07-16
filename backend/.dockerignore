@@ -1,0 +1,11 @@
+.venv/
+__pycache__/
+*.pyc
+.git/
+.mypy_cache/
+.ruff_cache/
+.claude/
+logs/
+database.db
+.env
+

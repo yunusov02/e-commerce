@@ -1,8 +1,8 @@
-"""create categories and products
+"""category and product models
 
-Revision ID: af8d17bd8cd3
+Revision ID: 201349e8b09c
 Revises: 
-Create Date: 2026-07-15 15:34:17.424446
+Create Date: 2026-07-16 14:59:36.533034
 
 """
 from typing import Sequence, Union
@@ -12,7 +12,7 @@ import sqlalchemy as sa
 
 
 # revision identifiers, used by Alembic.
-revision: str = 'af8d17bd8cd3'
+revision: str = '201349e8b09c'
 down_revision: Union[str, Sequence[str], None] = None
 branch_labels: Union[str, Sequence[str], None] = None
 depends_on: Union[str, Sequence[str], None] = None
@@ -27,10 +27,11 @@ def upgrade() -> None:
     sa.Column('slug', sa.String(), nullable=False),
     sa.Column('description', sa.String(), nullable=False),
     sa.Column('parent_id', sa.Integer(), nullable=True),
-    sa.Column('created_at', sa.DateTime(timezone=True), server_default=sa.text('(CURRENT_TIMESTAMP)'), nullable=False),
-    sa.Column('updated_at', sa.DateTime(timezone=True), server_default=sa.text('(CURRENT_TIMESTAMP)'), nullable=False),
-    sa.ForeignKeyConstraint(['parent_id'], ['category.id'], ),
-    sa.PrimaryKeyConstraint('id')
+    sa.Column('created_at', sa.DateTime(timezone=True), server_default=sa.text('now()'), nullable=False),
+    sa.Column('updated_at', sa.DateTime(timezone=True), server_default=sa.text('now()'), nullable=False),
+    sa.ForeignKeyConstraint(['parent_id'], ['category.id'], ondelete='SET NULL'),
+    sa.PrimaryKeyConstraint('id'),
+    sa.UniqueConstraint('slug')
     )
     op.create_index(op.f('ix_category_id'), 'category', ['id'], unique=False)
     op.create_table('product',
@@ -40,8 +41,8 @@ def upgrade() -> None:
     sa.Column('price', sa.Numeric(precision=10, scale=2), nullable=False),
     sa.Column('sku', sa.String(), nullable=False),
     sa.Column('category_id', sa.Integer(), nullable=False),
-    sa.Column('created_at', sa.DateTime(timezone=True), server_default=sa.text('(CURRENT_TIMESTAMP)'), nullable=False),
-    sa.Column('updated_at', sa.DateTime(timezone=True), server_default=sa.text('(CURRENT_TIMESTAMP)'), nullable=False),
+    sa.Column('created_at', sa.DateTime(timezone=True), server_default=sa.text('now()'), nullable=False),
+    sa.Column('updated_at', sa.DateTime(timezone=True), server_default=sa.text('now()'), nullable=False),
     sa.ForeignKeyConstraint(['category_id'], ['category.id'], ),
     sa.PrimaryKeyConstraint('id'),
     sa.UniqueConstraint('sku')

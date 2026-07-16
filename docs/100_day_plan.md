@@ -141,14 +141,14 @@ Before starting Day 1, make sure the following are available on your machine:
 #### Day 4 — Docker & Docker Compose
 **Daily Time Budget: ~5h**
 
-- [ ] Write `Dockerfile` for FastAPI — use `python:3.12-slim`, multi-stage NOT yet (keep simple), install deps from `requirements.txt`, expose 8000 (45 min)
-- [ ] Write `docker-compose.yml` with services: `api` (FastAPI), `db` (postgres:16-alpine) with volume, health check on db (1h)
-- [ ] Add `.env.example` file with all required env vars; document each in a comment (20 min)
-- [ ] Confirm `docker compose up --build` starts both services and `/docs` is reachable at `localhost:8000` (30 min)
-- [ ] Run Alembic migrations inside container on startup via `entrypoint.sh` — `alembic upgrade head && uvicorn ...` (45 min)
-- [ ] Scaffold React app: `npm create vite@latest frontend -- --template react-ts` (20 min)
-- [ ] Add `frontend` service to `docker-compose.yml` — Node 20, mount `./frontend`, expose 3000 (30 min)
-- [ ] Confirm all three services start together: React at :3000, FastAPI at :8000, Postgres at :5432 (30 min)
+- [x] Write `Dockerfile` for FastAPI — use `python:3.12-slim`, multi-stage NOT yet (keep simple), install deps from `requirements.txt`, expose 8000 (45 min)
+- [x] Write `docker-compose.yml` with services: `api` (FastAPI), `db` (postgres:16-alpine) with volume, health check on db (1h)
+- [x] Add `.env.example` file with all required env vars; document each in a comment (20 min)
+- [x] Confirm `docker compose up --build` starts both services and `/docs` is reachable at `localhost:8000` (30 min)
+- [x] Run Alembic migrations inside container on startup via `entrypoint.sh` — `alembic upgrade head && uvicorn ...` (45 min)
+- [x] Scaffold React app: `npm create vite@latest frontend -- --template react-ts` (20 min)
+- [x] Add `frontend` service to `docker-compose.yml` — Node 20, mount `./frontend`, expose 3000 (30 min)
+- [x] Confirm all three services start together: React at :3000, FastAPI at :8000, Postgres at :5432 (30 min)
 
 ---
 

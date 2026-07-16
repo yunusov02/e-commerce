@@ -1,5 +1,7 @@
 *.db
 .*
+# exclude .dockerignore
+!.dockerignore
 
 # Byte-compiled / optimized / DLL files
 __pycache__/
